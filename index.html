@@ -69,6 +69,11 @@
         <!-- TOP APP HEADER -->
         <header class="app-header glassmorphic">
             <div class="header-left">
+                <!-- Mobile sidebar toggle menu button -->
+                <button class="action-btn mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileSidebar()" title="Toggle Offices">
+                    <i data-lucide="menu"></i>
+                </button>
+                
                 <div class="app-logo">
                     <i data-lucide="contact-2"></i>
                 </div>
@@ -266,11 +271,18 @@
                                     <span id="contactCountLabel">1 Contacts</span>
                                 </p>
                             </div>
-                            <!-- Admin Add Contact Trigger -->
-                            <button class="btn btn-primary btn-sm hidden" id="adminAddContactBtn" onclick="openAddContactModal()">
-                                <i data-lucide="plus-circle"></i>
-                                <span id="lblAddContact">Add Contact</span>
-                            </button>
+                            <div class="banner-actions-buttons-container">
+                                <!-- Mobile menu trigger inside banner -->
+                                <button class="btn btn-secondary btn-sm mobile-office-toggle-btn" onclick="toggleMobileSidebar()">
+                                    <i data-lucide="menu"></i>
+                                    <span id="lblMobileOffices">Offices</span>
+                                </button>
+                                <!-- Admin Add Contact Trigger -->
+                                <button class="btn btn-primary btn-sm hidden" id="adminAddContactBtn" onclick="openAddContactModal()">
+                                    <i data-lucide="plus-circle"></i>
+                                    <span id="lblAddContact">Add Contact</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     
@@ -382,6 +394,9 @@
     <button class="back-to-top glassmorphic hidden" id="backToTopBtn" onclick="scrollToTop()" title="Back to Top">
         <i data-lucide="arrow-up"></i>
     </button>
+    
+    <!-- Sidebar backdrop drawer overlay for mobile -->
+    <div id="sidebarBackdrop" class="sidebar-backdrop hidden" onclick="closeMobileSidebar()"></div>
     
     <!-- Toast Notification Container -->
     <div id="toastContainer" class="toast-container"></div>

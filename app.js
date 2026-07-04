@@ -88,6 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         emptyDesc: document.getElementById('emptyDesc'),
         backToTopBtn: document.getElementById('backToTopBtn'),
         toastContainer: document.getElementById('toastContainer'),
+        sidebar: document.querySelector('.sidebar'),
+        sidebarBackdrop: document.getElementById('sidebarBackdrop'),
         
         contactModal: document.getElementById('contactModal'),
         contactForm: document.getElementById('contactForm'),
@@ -399,6 +401,9 @@ function selectOffice(index) {
     // Render cards
     renderContactCards(office.contacts, false);
     elements.contentArea.scrollTop = 0;
+    
+    // Close sidebar drawer automatically on mobile after selecting
+    closeMobileSidebar();
 }
 
 // --- Render Contacts Cards List ---
@@ -1036,4 +1041,23 @@ function showToast(message) {
             toast.remove();
         }, 300);
     }, 2200);
+}
+
+// --- Mobile Sidebar Controls ---
+function toggleMobileSidebar() {
+    if (elements.sidebar && elements.sidebarBackdrop) {
+        elements.sidebar.classList.toggle('mobile-open');
+        if (elements.sidebar.classList.contains('mobile-open')) {
+            elements.sidebarBackdrop.classList.remove('hidden');
+        } else {
+            elements.sidebarBackdrop.classList.add('hidden');
+        }
+    }
+}
+
+function closeMobileSidebar() {
+    if (elements.sidebar && elements.sidebarBackdrop) {
+        elements.sidebar.classList.remove('mobile-open');
+        elements.sidebarBackdrop.classList.add('hidden');
+    }
 }
