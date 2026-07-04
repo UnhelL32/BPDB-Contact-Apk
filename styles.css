@@ -359,14 +359,15 @@ body {
    2. MAIN APP CONTAINER LAYOUT
    ========================================================================== */
 .app-layout-wrapper {
-    display: grid;
-    grid-template-rows: 72px 1fr 50px;
+    display: flex;
+    flex-direction: column;
     height: 100vh;
     width: 100vw;
+    overflow: hidden;
 }
 
 .app-header {
-    grid-row: 1;
+    flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -447,12 +448,11 @@ body {
    3. SIDEBAR WITH TABS & OFFICE PANELS
    ========================================================================== */
 .main-layout {
-    grid-row: 2;
+    flex: 1;
     display: grid;
     grid-template-columns: 340px 1fr;
     gap: 15px;
     padding: 5px 15px;
-    height: calc(100vh - 132px);
     overflow: hidden;
 }
 
@@ -1363,7 +1363,7 @@ body {
    8. FOOTER AND FLOATING WIDGETS
    ========================================================================== */
 .app-footer {
-    grid-row: 3;
+    flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1496,8 +1496,9 @@ body {
     }
     
     .app-layout-wrapper {
-        grid-template-rows: auto 1fr auto;
-        height: 100vh; /* Keep 100vh to maintain independent scrolling */
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
         overflow: hidden;
     }
 
@@ -1531,10 +1532,11 @@ body {
     }
     
     .main-layout {
+        flex: 1;
         grid-template-columns: 1fr;
         gap: 0;
         padding: 0 8px;
-        height: calc(100vh - 176px); /* Adjusted for taller mobile header */
+        overflow: hidden;
     }
 
     /* Sidebar transforms into Slide-Over Drawer on Mobile */
