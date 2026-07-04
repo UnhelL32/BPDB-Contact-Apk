@@ -17,9 +17,55 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="dark-theme">
-    <!-- App Container Grid -->
-    <div class="app-container">
-        
+    <!-- ================= 1. AUTHENTICATION LANDING VIEW ================= -->
+    <div id="auth-view" class="auth-container">
+        <div class="auth-card glassmorphic">
+            <div class="auth-header">
+                <div class="bpdb-shield">
+                    <i data-lucide="shield-check"></i>
+                </div>
+                <h1 id="authTitle">BPDB Contacts</h1>
+                <h2 id="authSubtitle">Secure Entry Gateway</h2>
+            </div>
+            
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="userId">User ID</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="user"></i>
+                        <input type="text" id="userId" placeholder="Enter User ID" required autocomplete="off">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="lock"></i>
+                        <input type="password" id="password" placeholder="Enter Password" required autocomplete="current-password">
+                    </div>
+                </div>
+                
+                <div id="loginError" class="error-msg hidden">
+                    <i data-lucide="alert-circle"></i>
+                    <span id="loginErrorText">Invalid credentials. Please try again.</span>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">
+                    <span>Sign In</span>
+                    <i data-lucide="arrow-right"></i>
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <p class="brand-text">System Developer</p>
+                <p class="developer-name">Md. Minhajul Haque</p>
+                <p class="developer-title">Sub Divisional Engineer, BPDB</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 2. MAIN APPLICATION CONTAINER ================= -->
+    <div id="app-container" class="app-layout-wrapper hidden">
         <!-- TOP APP HEADER -->
         <header class="app-header glassmorphic">
             <div class="header-left">
@@ -44,6 +90,9 @@
             </div>
             
             <div class="header-actions">
+                <!-- User Info and Logout Badge -->
+                <div class="user-role-badge" id="roleBadge">User</div>
+                
                 <!-- Language Toggle Button -->
                 <button class="action-btn" id="langToggleBtn" onclick="toggleLanguage()" title="Switch Language">
                     <i data-lucide="languages"></i>
@@ -55,61 +104,190 @@
                     <i data-lucide="sun" id="themeIconSun"></i>
                     <i data-lucide="moon" id="themeIconMoon" class="hidden"></i>
                 </button>
+                
+                <!-- Sign Out -->
+                <button class="action-btn btn-danger-action" onclick="handleLogout()" title="Sign Out">
+                    <i data-lucide="log-out"></i>
+                </button>
             </div>
         </header>
         
-        <!-- MAIN APP CONTENT GRID -->
+        <!-- MAIN APP LAYOUT GRID -->
         <div class="main-layout">
             
-            <!-- SIDEBAR: OFFICES LIST -->
+            <!-- SIDEBAR NAVIGATION & OFFICE SELECTOR -->
             <aside class="sidebar glassmorphic">
-                <div class="sidebar-header">
-                    <h2 id="sidebarTitle">BPDB Offices</h2>
-                    <span class="office-count-tag"><strong id="totalOfficesLabel">348</strong> Offices</span>
+                <!-- Tab Switching Navigation -->
+                <div class="sidebar-tabs">
+                    <button class="tab-nav-btn active" id="btnTabDashboard" onclick="switchTab('dashboard')">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span id="tabDashboardLabel">Dashboard</span>
+                    </button>
+                    <button class="tab-nav-btn" id="btnTabDirectory" onclick="switchTab('directory')">
+                        <i data-lucide="folder-search-2"></i>
+                        <span id="tabDirectoryLabel">Directory</span>
+                    </button>
                 </div>
                 
-                <!-- Office search -->
-                <div class="office-search-box">
-                    <i data-lucide="filter" class="filter-icon"></i>
-                    <input type="text" id="officeSearchInput" placeholder="Filter offices..." oninput="filterOffices()">
+                <!-- Office Selector Section (Only shown when Directory tab is active) -->
+                <div class="sidebar-office-panel hidden" id="sidebarOfficePanel">
+                    <div class="sidebar-header">
+                        <h2 id="sidebarTitle">BPDB Offices</h2>
+                        <span class="office-count-tag"><strong id="totalOfficesLabel">348</strong> Offices</span>
+                    </div>
+                    
+                    <div class="office-search-box">
+                        <i data-lucide="filter" class="filter-icon"></i>
+                        <input type="text" id="officeSearchInput" placeholder="Filter offices..." oninput="filterOffices()">
+                    </div>
+                    
+                    <div class="office-list-scrollable" id="officeListContainer">
+                        <!-- Dynamic offices generated by app.js -->
+                    </div>
                 </div>
-                
-                <!-- Scrollable Office List -->
-                <div class="office-list-scrollable" id="officeListContainer">
-                    <!-- Dynamic offices generated by app.js -->
+
+                <!-- Sticky Sidebar Developer Branding -->
+                <div class="sidebar-branding-card">
+                    <div class="dev-header-stamp">
+                        <i data-lucide="code-2"></i>
+                        <span id="devStampLabel">System Developer</span>
+                    </div>
+                    <p class="dev-name-stamp">Md. Minhajul Haque</p>
+                    <p class="dev-office-stamp">Sub Divisional Engineer, BPDB</p>
                 </div>
             </aside>
             
-            <!-- MAIN CONTENT AREA -->
+            <!-- MAIN CONTENT DISPLAY PANELS -->
             <main class="content-area">
                 
-                <!-- Active Office Banner -->
-                <section class="office-header-banner glassmorphic" id="officeBanner">
-                    <div class="banner-content">
-                        <div class="office-badge" id="officeBadge">BPDB</div>
-                        <h2 id="currentOfficeTitle">Office of the Chairman</h2>
-                        <h3 id="currentOfficeTitleBn" class="bn-text hidden">চেয়ারম্যানের দপ্তর</h3>
-                        <p class="office-meta">
-                            <span id="departmentLabel">Board Secretariate</span>
-                            <span class="dot-separator">•</span>
-                            <span id="contactCountLabel">1 Contacts</span>
-                        </p>
+                <!-- VIEW 2.1: DASHBOARD TAB VIEW -->
+                <section class="tab-content active" id="tab-dashboard-view">
+                    <!-- Dashboard Welcome Header -->
+                    <div class="dashboard-welcome-banner glassmorphic">
+                        <div class="welcome-badge">
+                            <i data-lucide="award"></i>
+                            <span id="welcomeBadgeLabel">BPDB OFFICIAL SYSTEM</span>
+                        </div>
+                        <h2 id="welcomeTitle">Welcome to BPDB Contacts Directory</h2>
+                        <p id="welcomeDesc">A comprehensive database of officers and employees across all 348 offices of Bangladesh Power Development Board.</p>
+                    </div>
+
+                    <!-- Statistics Cards Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card glassmorphic">
+                            <div class="stat-icon icon-blue">
+                                <i data-lucide="users"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3 id="statTotalContacts">0</h3>
+                                <p id="lblTotalContacts">Total Records</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glassmorphic" onclick="switchTab('directory')">
+                            <div class="stat-icon icon-purple">
+                                <i data-lucide="building-2"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3 id="statTotalOffices">0</h3>
+                                <p id="lblTotalOffices">Offices Grouped</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glassmorphic">
+                            <div class="stat-icon icon-green">
+                                <i data-lucide="phone-call"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3 id="statTotalPhone">0</h3>
+                                <p id="lblTotalPhone">With Contact No.</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glassmorphic">
+                            <div class="stat-icon icon-orange">
+                                <i data-lucide="mail-check"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3 id="statTotalEmail">0</h3>
+                                <p id="lblTotalEmail">With Email Address</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seniority Tier Headcount breakdowns -->
+                    <div class="dashboard-grid">
+                        <!-- Headcount Breakdown Card -->
+                        <div class="dashboard-card glassmorphic double-width">
+                            <div class="card-header">
+                                <h2 id="breakdownTitle">Designation Seniority Headcount</h2>
+                                <p id="breakdownDesc">Distribution of active personnel categorized by corporate tiers</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="breakdown-list" id="seniorityBreakdownList">
+                                    <!-- Dynamic list items from JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System developer credit banner inside dashboard -->
+                        <div class="dashboard-card glassmorphic developer-profile-card">
+                            <div class="profile-header">
+                                <div class="profile-avatar">MH</div>
+                                <div class="profile-title-group">
+                                    <h4>Md. Minhajul Haque</h4>
+                                    <p>Sub Divisional Engineer</p>
+                                    <span>BPDB</span>
+                                </div>
+                            </div>
+                            <div class="profile-body">
+                                <p id="devProfileQuote">"This Contact Directory App has been custom designed and developed to provide fast, role-secured, and intuitive access to BPDB personnel details."</p>
+                                <a href="mailto:jioniut@gmail.com" class="profile-mail-link">
+                                    <i data-lucide="mail"></i>
+                                    <span>jioniut@gmail.com</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </section>
                 
-                <!-- Contacts Grid Container -->
-                <section class="contacts-grid" id="contactsGrid">
-                    <!-- Dynamic contact cards generated by app.js -->
-                </section>
-                
-                <!-- No Results / Welcome Card -->
-                <div class="empty-state-card glassmorphic hidden" id="emptyStateCard">
-                    <div class="empty-icon">
-                        <i data-lucide="user-x"></i>
+                <!-- VIEW 2.2: DIRECTORY TAB VIEW -->
+                <section class="tab-content hidden" id="tab-directory-view">
+                    <!-- Active Office Banner -->
+                    <div class="office-header-banner glassmorphic" id="officeBanner">
+                        <div class="banner-actions-wrap">
+                            <div class="banner-content">
+                                <div class="office-badge" id="officeBadge">BPDB</div>
+                                <h2 id="currentOfficeTitle">Office of the Chairman</h2>
+                                <h3 id="currentOfficeTitleBn" class="bn-text hidden">চেয়ারম্যানের দপ্তর</h3>
+                                <p class="office-meta">
+                                    <span id="departmentLabel">Board Secretariate</span>
+                                    <span class="dot-separator">•</span>
+                                    <span id="contactCountLabel">1 Contacts</span>
+                                </p>
+                            </div>
+                            <!-- Admin Add Contact Trigger -->
+                            <button class="btn btn-primary btn-sm hidden" id="adminAddContactBtn" onclick="openAddContactModal()">
+                                <i data-lucide="plus-circle"></i>
+                                <span id="lblAddContact">Add Contact</span>
+                            </button>
+                        </div>
                     </div>
-                    <h3 id="emptyTitle">No Contacts Found</h3>
-                    <p id="emptyDesc">Try adjusting your search criteria or filter to a different office.</p>
-                </div>
+                    
+                    <!-- Contacts Grid Container -->
+                    <div class="contacts-grid" id="contactsGrid">
+                        <!-- Dynamic contact cards generated by app.js -->
+                    </div>
+                    
+                    <!-- No Results / Welcome Card -->
+                    <div class="empty-state-card glassmorphic hidden" id="emptyStateCard">
+                        <div class="empty-icon">
+                            <i data-lucide="user-x"></i>
+                        </div>
+                        <h3 id="emptyTitle">No Contacts Found</h3>
+                        <p id="emptyDesc">Try adjusting your search criteria or filter to a different office.</p>
+                    </div>
+                </section>
                 
             </main>
         </div>
@@ -119,9 +297,85 @@
             <p>Bangladesh Power Development Board &copy; 2026. All Rights Reserved.</p>
             <div class="developer-tag">
                 <span>Designed & Developed by:</span>
-                <strong>Md. Minhajul Haque, SDE, BPDB-17</strong>
+                <strong>Md. Minhajul Haque, SDE, BPDB</strong>
             </div>
         </footer>
+    </div>
+
+    <!-- ================= 3. MODALS & FORMS (Admin CRUD) ================= -->
+    <div class="modal-backdrop hidden" id="contactModal">
+        <div class="modal-card glassmorphic">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Contact</h2>
+                <button class="btn-close" onclick="closeContactModal()">&times;</button>
+            </div>
+            
+            <form id="contactForm" onsubmit="saveContact(event)">
+                <input type="hidden" id="editOriginalCode">
+                <input type="hidden" id="editOriginalOffice">
+                
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cCode">Employee Code *</label>
+                            <input type="text" id="cCode" placeholder="e.g. 1-0940" required autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="cName">Full Name *</label>
+                            <input type="text" id="cName" placeholder="e.g. Md. Jakir Hossain" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cNameBn">Full Name (Bangla)</label>
+                        <input type="text" id="cNameBn" placeholder="e.g. মোঃ জাকির হোসেন" autocomplete="off">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cOffice">Office Name *</label>
+                            <input type="text" id="cOffice" placeholder="e.g. Office of the Chairman" required autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="cOfficeBn">Office Name (Bangla)</label>
+                            <input type="text" id="cOfficeBn" placeholder="e.g. চেয়ারম্যানের দপ্তর" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cDept">Department *</label>
+                            <input type="text" id="cDept" placeholder="e.g. Board Secretariate" required autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="cDesig">Designation *</label>
+                            <input type="text" id="cDesig" placeholder="e.g. Chairman" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cDesigBn">Designation (Bangla)</label>
+                            <input type="text" id="cDesigBn" placeholder="e.g. চেয়ারম্যান" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="cContact">Contact Number</label>
+                            <input type="text" id="cContact" placeholder="e.g. 01712000000" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cEmail">Email Address</label>
+                        <input type="email" id="cEmail" placeholder="e.g. example@bpdb.gov.bd" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeContactModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btnSubmitForm">Save Record</button>
+                </div>
+            </form>
+        </div>
     </div>
     
     <!-- Floating Back to Top Button -->
