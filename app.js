@@ -777,21 +777,21 @@ function closeContactModal() {
 
 // Map designation to Seniority score
 function getSeniorityScore(desig) {
-    const d = desig.strip().toLowerCase();
+    const d = desig.trim().toLowerCase();
     
-    if ('chairman' in d) return 0;
-    if ('member' in d) return 1;
-    if ('chief engineer' in d || 'controller, accounts' in d || 'secretary' in d) return 2;
-    if ('additional chief' in d || 'addl. chief' in d || 'general manager' in d) return 3;
-    if ('superintendent engineer' in d || 'superintending engineer' in d || 'cso' in d || 'director (se)' in d || 'manager (se)' in d || 'deputy secretary' in d) return 4;
-    if ('executive engineer' in d || 'xen' in d || 'system analyst' in d || 'medical officer' in d || 'deputy director' in d || 'director' in d) return 5;
-    if ('sub-divisional engineer' in d || 'sde' in d || 'programmer' in d || 'assistant director' in d || 'accounts officer' in d || 'audit officer' in d) return 6;
-    if ('assistant engineer' in d || 'assistant programmer' in d || 'administrative officer' in d || 'medical assistant' in d) return 7;
-    if ('sub-assistant engineer' in d || 'sub assistant' in d || 'junior assistant' in d || 'inspector' in d) return 8;
-    if ('junior officer' in d || 'accountant' in d || 'foreman' in d || 'supervisor' in d) return 9;
-    if ('driver' in d || 'assistant accountant' in d || 'cashier' in d || 'storekeeper' in d || 'accounts assistant' in d) return 10;
-    if ('operator' in d || 'electrician' in d || 'mechanic' in d || 'fitter' in d || 'winder' in d || 'jointer' in d || 'machinist' in d) return 11;
-    if ('helper' in d || 'guard' in d || 'peon' in d || 'cleaner' in d || 'sweeper' in d || 'messenger' in d || 'chowkidar' in d || 'gardener' in d || 'cook' in d || 'attendant' in d) return 12;
+    if (d.includes('chairman')) return 0;
+    if (d.includes('member')) return 1;
+    if (d.includes('chief engineer') || d.includes('controller, accounts') || d.includes('secretary')) return 2;
+    if (d.includes('additional chief') || d.includes('addl. chief') || d.includes('general manager')) return 3;
+    if (d.includes('superintendent engineer') || d.includes('superintending engineer') || d.includes('cso') || d.includes('director (se)') || d.includes('manager (se)') || d.includes('deputy secretary')) return 4;
+    if (d.includes('executive engineer') || d.includes('xen') || d.includes('system analyst') || d.includes('medical officer') || d.includes('deputy director') || d.includes('director')) return 5;
+    if (d.includes('sub-divisional engineer') || d.includes('sde') || d.includes('programmer') || d.includes('assistant director') || d.includes('accounts officer') || d.includes('audit officer')) return 6;
+    if (d.includes('assistant engineer') || d.includes('assistant programmer') || d.includes('administrative officer') || d.includes('medical assistant')) return 7;
+    if (d.includes('sub-assistant engineer') || d.includes('sub assistant') || d.includes('junior assistant') || d.includes('inspector')) return 8;
+    if (d.includes('junior officer') || d.includes('accountant') || d.includes('foreman') || d.includes('supervisor')) return 9;
+    if (d.includes('driver') || d.includes('assistant accountant') || d.includes('cashier') || d.includes('storekeeper') || d.includes('accounts assistant')) return 10;
+    if (d.includes('operator') || d.includes('electrician') || d.includes('mechanic') || d.includes('fitter') || d.includes('winder') || d.includes('jointer') || d.includes('machinist')) return 11;
+    if (d.includes('helper') || d.includes('guard') || d.includes('peon') || d.includes('cleaner') || d.includes('sweeper') || d.includes('messenger') || d.includes('chowkidar') || d.includes('gardener') || d.includes('cook') || d.includes('attendant')) return 12;
     return 13;
 }
 
